@@ -5,20 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Note (Anthony Fleury) : 
- * Cette strategie est a modifier et a adapter pour que vous puissiez rendre la votre.
- * Pour la modifier, avec le bouton droit, faite un Refactor, Rename et donnez lui le nom de votre classe 
- * StratX avec X votre numero de rendu. 
- * Une fois fait, completez CORRECTEMENT les methodes getName et getGroupes.
- * Vous n'aurez ensuite qu'a completer le code de votre propre strategie, a vous de jouer !
- */
 
-
-
-/**
- * @author humeau
- */
 public class Strat46 implements Strategie{
     Random rand;
     int NbVillage;
@@ -33,9 +20,9 @@ public class Strat46 implements Strategie{
     @Override
     public int[] mouvement(Terrain [] _plateau, int _myColor, int [] _colorScore, int _myScore, int _opponentScore, int [] _opponentMov, int [] _opponentVillages){
         int[] res= new int[2];
-        int nbChoix= Tools.getNbSourceValide(_plateau);                         //on récupère le nb de source valide     
+        int nbChoix= Tools.getNbSourceValide(_plateau);                         //on rÃ©cupÃ¨re le nb de source valide     
         
-        // ci dessous on initialise toutes les sources et destinations , ceci afin de pouvoir les classer par ordre de priotité
+        // ci dessous on initialise toutes les sources et destinations , ceci afin de pouvoir les classer par ordre de priotitÃ©
         int src= 0;
         int dest = 0;
         int src_prio_1= 0;
@@ -86,20 +73,20 @@ public class Strat46 implements Strategie{
         
         int[] sourcesPossibles = Tools.getSource(_plateau);                     // tableau de toutes les sources possibles
         int nbSourcesPossibles = sourcesPossibles.length;                       // Nombre de sources possibles
-        int [] sources_melangees = melange(sourcesPossibles);                   //Parcourir aléatoirement les sources possibles afin de ne pas être prévisible
+        int [] sources_melangees = melange(sourcesPossibles);                   //Parcourir alÃ©atoirement les sources possibles afin de ne pas Ãªtre prÃ©visible
         NbVillage = Tools.countVillage(_plateau);                               // Nombre de village sur le plateau actuel
-        __plateau = _plateau;                                                   // On récupère le plateau pour la fonction ordre
-        for(int k = 0; k< nbSourcesPossibles; k++){                             // Parcours de toutes les sources possibles une par une aléatoirement
+        __plateau = _plateau;                                                   // On rÃ©cupÃ¨re le plateau pour la fonction ordre
+        for(int k = 0; k< nbSourcesPossibles; k++){                             // Parcours de toutes les sources possibles une par une alÃ©atoirement
             int source = sources_melangees[k];
             int nbVoisins = Tools.getNbVoisinDispo(_plateau, source);           // Nombre de voisins de la source actuelle
             
-            if(nbVoisins == 1 ){                                                //Un terrain à un seul voisin -> village à créer (décomposition de tous les cas possibles ci dessous)
+            if(nbVoisins == 1 ){                                                //Un terrain Ã  un seul voisin -> village Ã  crÃ©er (dÃ©composition de tous les cas possibles ci dessous)
                 
                 int voisin = Tools.getVoisinsDispo(_plateau, source)[0];        //Le seul voisin dispo
                 
-                if(source != voisin){                                           // On s'assure de la différence entre la case de la source et celle du voisin (pour éviter de faire planter au cas où)
+                if(source != voisin){                                           // On s'assure de la diffÃ©rence entre la case de la source et celle du voisin (pour Ã©viter de faire planter au cas oÃ¹)
                     
-                    if(Tools.getNbVoisinDispo(_plateau, voisin) == 1){          // SI la source ET le voisin n'ont qu'un seul voisin tous les 2 : il faut choisir où construire le village
+                    if(Tools.getNbVoisinDispo(_plateau, voisin) == 1){          // SI la source ET le voisin n'ont qu'un seul voisin tous les 2 : il faut choisir oÃ¹ construire le village
                         
                        
                         if(SurBonus(_plateau, voisin,0) ){                         //On fait le village sur un bonus si possible
@@ -122,7 +109,7 @@ public class Strat46 implements Strategie{
                              }
                         }
                         
-                        if(!SurMalus(_plateau, source) && _plateau[voisin].getNbCabane() < 7){  //On évite de faire un village sur un malus
+                        if(!SurMalus(_plateau, source) && _plateau[voisin].getNbCabane() < 7){  //On Ã©vite de faire un village sur un malus
                             int q[] = Tools.listeVillagesCreesSi(_plateau, voisin);
                             int t[] = ordre(q);
                             if(Tools.evaluerGain(_plateau, voisin, source, t)[_myColor] >= score_3){
@@ -143,7 +130,7 @@ public class Strat46 implements Strategie{
                         }
                         
                         
-                        else {                                                  //On créé le village quand même (si aucun des cas ci-dessus) pour gagner des points 
+                        else {                                                  //On crÃ©Ã© le village quand mÃªme (si aucun des cas ci-dessus) pour gagner des points 
                             int q[] = Tools.listeVillagesCreesSi(_plateau, source);
                             int t[] = ordre(q);
                             if(Tools.evaluerGain(_plateau, source, voisin, t)[_myColor] >= score_5){
@@ -155,10 +142,10 @@ public class Strat46 implements Strategie{
                         
                         
                     }
-                     //La source à un voisin, le voisin plus d'un voisin
+                     //La source Ã  un voisin, le voisin plus d'un voisin
                     else if(SurMalus(_plateau,source) && _plateau[source].getCabanes(_myColor)+_plateau[voisin].getCabanes(_myColor) > 1 ){ 
                         
-                        //Je peux faire un village avec mes cabanes mais il est sur un malus-> On ne le créé pas
+                        //Je peux faire un village avec mes cabanes mais il est sur un malus-> On ne le crÃ©Ã© pas
                         int q[] = Tools.listeVillagesCreesSi(_plateau, source);
                         int t[] = ordre(q);
                         if(Tools.evaluerGain(_plateau, source, voisin, t)[_myColor] >= score_6){
@@ -170,7 +157,7 @@ public class Strat46 implements Strategie{
                     }
                     
                     else if(_plateau[voisin].getCabanes(_myColor) == 0  && _plateau[source].getCabanes(_myColor) >=2 && _plateau[voisin].getNbCabane() < 7){
-                        //Aucune cabane de ma couleur sur la source mais au moins 2 sur son seul voisin -> je créé le village
+                        //Aucune cabane de ma couleur sur la source mais au moins 2 sur son seul voisin -> je crÃ©Ã© le village
                         int q[] = Tools.listeVillagesCreesSi(_plateau, voisin);
                         int t[] = ordre(q);
                         if(Tools.evaluerGain(_plateau, voisin, source, t)[_myColor] >= score_7){
@@ -181,7 +168,7 @@ public class Strat46 implements Strategie{
                     }
                     
                     else if(_plateau[source].getCabanes(_myColor) >= 2 && _plateau[voisin].getNbCabane() < 7){
-                        //Au moins 2 cabanes de ma couleur sur la source, je ramène le voisin quelqu'il soit
+                        //Au moins 2 cabanes de ma couleur sur la source, je ramÃ¨ne le voisin quelqu'il soit
                         int q[] = Tools.listeVillagesCreesSi(_plateau, voisin);
                         int t[] = ordre(q);
                         if(Tools.evaluerGain(_plateau, voisin, source, t)[_myColor] >= score_8){
@@ -207,7 +194,7 @@ public class Strat46 implements Strategie{
                     }
                     
                     else if(_plateau[voisin].getCabanes(_myColor) == 0 && _plateau[voisin].getNbCabane() < 7 && Tools.getNbVoisinDispo(_plateau, voisin) > 1 && _plateau[source].getNbCabane() == 1){
-                        // Aucune cabane de ma couleur mais une seule cabane au total -> je créé le village quand même, je n'offre qu'un point à un adversaire et en gagne 1
+                        // Aucune cabane de ma couleur mais une seule cabane au total -> je crÃ©Ã© le village quand mÃªme, je n'offre qu'un point Ã  un adversaire et en gagne 1
                         source = voisin;
                         int n = Tools.getVoisinsDispo(_plateau, source)[rand.nextInt(nbVoisins)];
                         if(n != source){
@@ -224,7 +211,7 @@ public class Strat46 implements Strategie{
                     
                     else{
                         if(_plateau[voisin].getNbCabane() < 7){
-                            //enfin je créé le village (au cas où aucun des cas précédent n'est rempli)
+                            //enfin je crÃ©Ã© le village (au cas oÃ¹ aucun des cas prÃ©cÃ©dent n'est rempli)
                             int q[] = Tools.listeVillagesCreesSi(_plateau, voisin);
                             int t[] = ordre(q);
                             if(Tools.evaluerGain(_plateau, voisin, source, t)[_myColor] >= score_11){
@@ -247,10 +234,10 @@ public class Strat46 implements Strategie{
             
             
             
-            //On ne peut pas créer de village, on offre aucune possibilité à l'adversaire 1) -> une case source avec plus de 2 voisins
+            //On ne peut pas crÃ©er de village, on offre aucune possibilitÃ© Ã  l'adversaire 1) -> une case source avec plus de 2 voisins
             else if (nbVoisins >= 2 ){                                          
                 
-                //Priorité = ne laisser aucune de mes cabanes seules sans offir un coup à l'adversaire
+                //PrioritÃ© = ne laisser aucune de mes cabanes seules sans offir un coup Ã  l'adversaire
                 int [] voisinsDispos = Tools.getVoisinsDispo(_plateau, source);
                 
                 if(PlusDeTroisVoisins(_plateau, source, nbVoisins,4 ) ){        //Une source dont tous les voisins ont au moins 4 voisins
@@ -316,7 +303,7 @@ public class Strat46 implements Strategie{
             
             
             if(_plateau[source].getCabanes(_myColor) == 1){                     
-            //Une case qui a une seule cabane de ma couleur -> La déplacer vers une autre case contenant des cabanes de ma couleur
+            //Une case qui a une seule cabane de ma couleur -> La dÃ©placer vers une autre case contenant des cabanes de ma couleur
                 int []voisins = Tools.getVoisinsDispo(_plateau, source);
                 for(int i = 0; i< nbVoisins ; i++){
                     int voisin = voisins[i];
@@ -331,7 +318,7 @@ public class Strat46 implements Strategie{
             
         }
         
-        //On met les return dans l'ordre de priorité des coups les plus intéressants au moins intéressants
+        //On met les return dans l'ordre de prioritÃ© des coups les plus intÃ©ressants au moins intÃ©ressants
         
         
         if(dest_prio_1 != 0 && src_prio_1 !=  0){
@@ -432,7 +419,7 @@ public class Strat46 implements Strategie{
             return res;
         }
         else{
-            //SI vraiment aucunes de TOUTES ces possibilitées, on joue random (pour ne pas faire planter dans ce cas TRES rare)
+            //SI vraiment aucunes de TOUTES ces possibilitÃ©es, on joue random (pour ne pas faire planter dans ce cas TRES rare)
             src= Tools.getSource(_plateau)[rand.nextInt(nbChoix)];              
             int nbVoisin= Tools.getNbVoisinDispo(_plateau, src);         
             dest= Tools.getVoisinsDispo(_plateau, src)[rand.nextInt(nbVoisin)];
@@ -448,10 +435,10 @@ public class Strat46 implements Strategie{
     @Override
     public int[] ordre( int[] _villages){   
         ArrayList ordre_creation = new ArrayList();
-        if(Tools.age(NbVillage) != Tools.age(NbVillage + _villages.length)){    // C'est-à-dire si on change d'âge
+        if(Tools.age(NbVillage) != Tools.age(NbVillage + _villages.length)){    // C'est-Ã -dire si on change d'Ã¢ge
             for(int k = 0; k < _villages.length; k++){
                 if(SurBonus(__plateau, _villages[k],ordre_creation.size())){
-                    ordre_creation.add(_villages[k]);                           //On créé en priorité ceux qui donne un bonus
+                    ordre_creation.add(_villages[k]);                           //On crÃ©Ã© en prioritÃ© ceux qui donne un bonus
                 }
             }
             if(ordre_creation.size() != _villages.length){
@@ -483,8 +470,8 @@ public class Strat46 implements Strategie{
     }
     
     /**
-     * Remplissez cette méthode avec le bon format expliqué ci-dessous
-     * @return le nom des élèves (sous le format NOM1_NOM2) 
+     * Remplissez cette mÃ©thode avec le bon format expliquÃ© ci-dessous
+     * @return le nom des Ã©lÃ¨ves (sous le format NOM1_NOM2) 
      * NOM1 et NOM2 sont uniquement les noms de famille de votre binome
      */
     public String getName(){
@@ -495,7 +482,7 @@ public class Strat46 implements Strategie{
         return "1";
     }
     
-    public boolean estVoisinDe(int source, int dest, Terrain[] plateau) {       // source et dest sont-ils vraiment voisin -> Algo de vérification pour corriger des bugs
+    public boolean estVoisinDe(int source, int dest, Terrain[] plateau) {       // source et dest sont-ils vraiment voisin -> Algo de vÃ©rification pour corriger des bugs
         int []t = Tools.getVoisinsDispo(plateau,source);
         for (int k=0; k<(t.length); k++){
            if (t[k] == dest){
@@ -574,7 +561,7 @@ public class Strat46 implements Strategie{
          return true;
      }
      
-    public int[] melange(int [] t){                                             //Mélange un tableau aléatoirement
+    public int[] melange(int [] t){                                             //MÃ©lange un tableau alÃ©atoirement
         for(int position = t.length-1; position >=1; position --){
             int hasard = (int) Math.floor(Math.random() * (position + 1));
             int svg = t[position];
@@ -588,7 +575,7 @@ public class Strat46 implements Strategie{
         int[] T = new int[integers.size()];
          for(int i=0;i<T.length;i++)
         {
-            if(T[i]==valeurATrouver)    // On parcours le tableau et on test si la valeur recherchée est présente
+            if(T[i]==valeurATrouver)    // On parcours le tableau et on test si la valeur recherchÃ©e est prÃ©sente
             {
                 return true;
             }
