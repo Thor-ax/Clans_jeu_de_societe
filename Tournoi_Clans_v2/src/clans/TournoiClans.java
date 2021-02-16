@@ -2,10 +2,6 @@ package clans;
 
 import strats.*;
 
-/**
- *
- * @author Anthony Fleury
- */
 public class TournoiClans {
 
     /**
